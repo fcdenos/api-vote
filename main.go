@@ -9,6 +9,7 @@ import (
 
 	"github.com/ritoon/api-vote/db"
 	"github.com/ritoon/api-vote/db/moke"
+	"github.com/ritoon/api-vote/db/sqlite"
 	"github.com/ritoon/api-vote/service"
 )
 
@@ -26,6 +27,8 @@ func main() {
 	var db db.DataManager
 	if viper.GetString("env") == "test" {
 		db = moke.New()
+	} else {
+		db = sqlite.New("test.db")
 	}
 	v1 := r.Group("/v1")
 	service.Init(v1, db)
