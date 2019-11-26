@@ -1,0 +1,171 @@
+{
+	"info": {
+		"_postman_id": "744a1b99-9248-40ea-90ed-6694258b81a3",
+		"name": "vote",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CreateProposal",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b6722f70-d8d3-480a-a8c3-3d35d7df019a",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"uuid\");",
+							"    pm.expect(pm.response.text()).to.include(\"title\");",
+							"    pm.expect(pm.response.text()).to.include(\"desc\");",
+							"});",
+							"",
+							"pm.test(\"Response time is less than 200ms\", function () {",
+							"    pm.expect(pm.response.responseTime).to.be.below(200);",
+							"});",
+							"",
+							"",
+							"pm.test(\"Set uuid proposal\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    console.log(jsonData.uuid);",
+							"    pm.environment.set(\"uuid_proposal\", jsonData.uuid);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\":\"ze title\",\n\t\"desc\":\"la desc\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/proposal",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"proposal"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetProposal",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8081/proposal/{{uuid_proposal}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"proposal",
+						"{{uuid_proposal}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteProposal",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\":\"ze title\",\n\t\"desc\":\"la desc\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/proposal/{{uuid_proposal}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"proposal",
+						"{{uuid_proposal}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateProposal",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"title\":\"new title\",\n\t\"desc\":\"new desc\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8081/proposal/{{uuid_proposal}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"proposal",
+						"{{uuid_proposal}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
