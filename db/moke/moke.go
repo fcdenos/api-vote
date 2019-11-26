@@ -10,7 +10,7 @@ type Moke struct {
 	listProposal map[string]*model.Proposal
 }
 
-func NewMoke() db.DataManager {
+func New() db.DataManager {
 	var m Moke
 	m.listUser = make(map[string]*model.User)
 	m.listProposal = make(map[string]*model.Proposal)

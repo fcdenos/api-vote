@@ -11,12 +11,12 @@ import (
 )
 
 type ServiceUser struct {
-	list map[string]*model.User
+	db db.DataManager
 }
 
-func initUser(r *gin.Engine) {
+func initUser(r *gin.Engine, data db.DataManager) {
 	var s ServiceUser
-	s.list = make(map[string]*model.User)
+	s.db = data
 	r.POST("/user", s.Create)
 	r.GET("/user/:uuid", s.Get)
 	r.DELETE("/user/:uuid", s.Delete)
@@ -33,14 +33,14 @@ func (sp *ServiceUser) Create(ctx *gin.Context) {
 		})
 		return
 	}
-	db.CreateUser(&u)
+	sp.db.CreateUser(&u)
 	ctx.JSON(http.StatusOK, u)
 }
 
 // Get is retriving a User from the uuid.
 func (sp *ServiceUser) Get(ctx *gin.Context) {
 	uuid := ctx.Param("uuid")
-	u, err := db.GetUser(uuid)
+	u, err := sp.db.GetUser(uuid)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, nil)
 		return
@@ -51,7 +51,7 @@ func (sp *ServiceUser) Get(ctx *gin.Context) {
 // Delete is deleting a User fron the uuid.
 func (sp *ServiceUser) Delete(ctx *gin.Context) {
 	uuid := ctx.Param("uuid")
-	err := db.DeleteUser(uuid)
+	err := sp.db.DeleteUser(uuid)
 	if err != nil {
 		ctx.JSON(http.StatusNoContent, nil)
 		return
@@ -72,7 +72,7 @@ func (sp *ServiceUser) Update(ctx *gin.Context) {
 		return
 	}
 
-	db.UpdateUser(uuid, &payload)
+	sp.db.UpdateUser(uuid, &payload)
 
 	ctx.JSON(http.StatusOK, &payload)
 }

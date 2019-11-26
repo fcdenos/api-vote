@@ -11,12 +11,12 @@ import (
 )
 
 type ServiceProposal struct {
-	list map[string]*model.Proposal
+	db db.DataManager
 }
 
-func initProposal(r *gin.Engine) {
+func initProposal(r *gin.Engine, data db.DataManager) {
 	var s ServiceProposal
-	s.list = make(map[string]*model.Proposal)
+	s.db = data
 	r.POST("/proposal", s.Create)
 	r.GET("/proposal/:uuid", s.Get)
 	r.DELETE("/proposal/:uuid", s.Delete)
@@ -34,14 +34,14 @@ func (sp *ServiceProposal) Create(ctx *gin.Context) {
 		return
 	}
 
-	db.CreateProposal(&p)
+	sp.db.CreateProposal(&p)
 	ctx.JSON(http.StatusOK, p)
 }
 
 // Get is retriving a proposal from the uuid.
 func (sp *ServiceProposal) Get(ctx *gin.Context) {
 	uuid := ctx.Param("uuid")
-	p, err := db.GetProposal(uuid)
+	p, err := sp.db.GetProposal(uuid)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, nil)
 		return
@@ -52,7 +52,7 @@ func (sp *ServiceProposal) Get(ctx *gin.Context) {
 // Delete is deleting a proposal fron the uuid.
 func (sp *ServiceProposal) Delete(ctx *gin.Context) {
 	uuid := ctx.Param("uuid")
-	err := db.DeleteProposal(uuid)
+	err := sp.db.DeleteProposal(uuid)
 	if err != nil {
 		log.Println(err)
 		ctx.JSON(http.StatusNoContent, nil)
@@ -74,7 +74,7 @@ func (sp *ServiceProposal) Update(ctx *gin.Context) {
 		return
 	}
 
-	p, _ := db.UpdateProposal(uuid, &payload)
+	p, _ := sp.db.UpdateProposal(uuid, &payload)
 
 	ctx.JSON(http.StatusOK, p)
 }
