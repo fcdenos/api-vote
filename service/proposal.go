@@ -4,8 +4,9 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/ritoon/api-vote/db"
+
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"github.com/ritoon/api-vote/model"
 )
 
@@ -33,16 +34,15 @@ func (sp *ServiceProposal) Create(ctx *gin.Context) {
 		return
 	}
 
-	p.UUID = uuid.New().String()
-	sp.list[p.UUID] = &p
+	db.CreateProposal(&p)
 	ctx.JSON(http.StatusOK, p)
 }
 
 // Get is retriving a proposal from the uuid.
 func (sp *ServiceProposal) Get(ctx *gin.Context) {
 	uuid := ctx.Param("uuid")
-	p, ok := sp.list[uuid]
-	if !ok {
+	p, err := db.GetProposal(uuid)
+	if err != nil {
 		ctx.JSON(http.StatusNotFound, nil)
 		return
 	}
@@ -52,24 +52,18 @@ func (sp *ServiceProposal) Get(ctx *gin.Context) {
 // Delete is deleting a proposal fron the uuid.
 func (sp *ServiceProposal) Delete(ctx *gin.Context) {
 	uuid := ctx.Param("uuid")
-	_, ok := sp.list[uuid]
-	if !ok {
+	err := db.DeleteProposal(uuid)
+	if err != nil {
+		log.Println(err)
 		ctx.JSON(http.StatusNoContent, nil)
 		return
 	}
-	delete(sp.list, uuid)
 	ctx.JSON(http.StatusOK, nil)
 }
 
 // Update is updating a proposal.
 func (sp *ServiceProposal) Update(ctx *gin.Context) {
 	uuid := ctx.Param("uuid")
-
-	p, ok := sp.list[uuid]
-	if !ok {
-		ctx.JSON(http.StatusNoContent, nil)
-		return
-	}
 
 	var payload model.Proposal
 	if err := ctx.BindJSON(&payload); err != nil {
@@ -80,8 +74,7 @@ func (sp *ServiceProposal) Update(ctx *gin.Context) {
 		return
 	}
 
-	p.Title = payload.Title
-	p.Desc = payload.Desc
+	p, _ := db.UpdateProposal(uuid, &payload)
 
 	ctx.JSON(http.StatusOK, p)
 }
