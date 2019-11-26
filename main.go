@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/ritoon/hello2/service"
+	"github.com/ritoon/api-vote/service"
 )
 
 func main() {

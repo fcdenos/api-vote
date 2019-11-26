@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/ritoon/hello2/model"
+	"github.com/ritoon/api-vote/model"
 )
 
 type ServiceProposal struct {

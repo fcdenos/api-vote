@@ -1,4 +1,4 @@
-module github.com/ritoon/hello2
+module github.com/ritoon/api-vote
 
 go 1.13
 
