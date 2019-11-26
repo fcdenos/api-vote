@@ -4,8 +4,9 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/ritoon/api-vote/db"
+
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 	"github.com/ritoon/api-vote/model"
 )
 
@@ -13,7 +14,7 @@ type ServiceUser struct {
 	list map[string]*model.User
 }
 
-func InitUser(r *gin.Engine) {
+func initUser(r *gin.Engine) {
 	var s ServiceUser
 	s.list = make(map[string]*model.User)
 	r.POST("/user", s.Create)
@@ -24,52 +25,43 @@ func InitUser(r *gin.Engine) {
 
 // Create is creating a User.
 func (sp *ServiceUser) Create(ctx *gin.Context) {
-	var p model.User
-	if err := ctx.BindJSON(&p); err != nil {
+	var u model.User
+	if err := ctx.BindJSON(&u); err != nil {
 		log.Println(err)
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err,
 		})
 		return
 	}
-
-	p.UUID = uuid.New().String()
-	sp.list[p.UUID] = &p
-	ctx.JSON(http.StatusOK, p)
+	db.CreateUser(&u)
+	ctx.JSON(http.StatusOK, u)
 }
 
 // Get is retriving a User from the uuid.
 func (sp *ServiceUser) Get(ctx *gin.Context) {
 	uuid := ctx.Param("uuid")
-	p, ok := sp.list[uuid]
-	if !ok {
+	u, err := db.GetUser(uuid)
+	if err != nil {
 		ctx.JSON(http.StatusNotFound, nil)
 		return
 	}
-	ctx.JSON(http.StatusOK, p)
+	ctx.JSON(http.StatusOK, u)
 }
 
 // Delete is deleting a User fron the uuid.
 func (sp *ServiceUser) Delete(ctx *gin.Context) {
 	uuid := ctx.Param("uuid")
-	_, ok := sp.list[uuid]
-	if !ok {
+	err := db.DeleteUser(uuid)
+	if err != nil {
 		ctx.JSON(http.StatusNoContent, nil)
 		return
 	}
-	delete(sp.list, uuid)
 	ctx.JSON(http.StatusOK, nil)
 }
 
 // Update is updating a User.
 func (sp *ServiceUser) Update(ctx *gin.Context) {
 	uuid := ctx.Param("uuid")
-
-	p, ok := sp.list[uuid]
-	if !ok {
-		ctx.JSON(http.StatusNoContent, nil)
-		return
-	}
 
 	var payload model.User
 	if err := ctx.BindJSON(&payload); err != nil {
@@ -80,8 +72,7 @@ func (sp *ServiceUser) Update(ctx *gin.Context) {
 		return
 	}
 
-	p.FirstName = payload.FirstName
-	p.LastName = payload.LastName
+	db.UpdateUser(uuid, &payload)
 
-	ctx.JSON(http.StatusOK, p)
+	ctx.JSON(http.StatusOK, &payload)
 }

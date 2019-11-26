@@ -13,7 +13,7 @@ type ServiceProposal struct {
 	list map[string]*model.Proposal
 }
 
-func InitProposal(r *gin.Engine) {
+func initProposal(r *gin.Engine) {
 	var s ServiceProposal
 	s.list = make(map[string]*model.Proposal)
 	r.POST("/proposal", s.Create)
@@ -67,7 +67,7 @@ func (sp *ServiceProposal) Update(ctx *gin.Context) {
 
 	p, ok := sp.list[uuid]
 	if !ok {
-		ctx.JSON(http.StatusNotFound, nil)
+		ctx.JSON(http.StatusNoContent, nil)
 		return
 	}
 
