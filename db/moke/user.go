@@ -1,4 +1,4 @@
-package db
+package moke
 
 import (
 	"errors"
@@ -7,22 +7,16 @@ import (
 	"github.com/ritoon/api-vote/model"
 )
 
-var list map[string]*model.User
-
-func init() {
-	list = make(map[string]*model.User)
-}
-
-func GetUser(uuid string) (*model.User, error) {
-	u, ok := list[uuid]
+func (m Moke) GetUser(uuid string) (*model.User, error) {
+	u, ok := m.listUser[uuid]
 	if !ok {
 		return nil, errors.New("user not found")
 	}
 	return u, nil
 }
 
-func UpdateUser(uuid string, payload *model.User) (*model.User, error) {
-	u, ok := list[uuid]
+func (m Moke) UpdateUser(uuid string, payload *model.User) (*model.User, error) {
+	u, ok := m.listUser[uuid]
 	if !ok {
 		return nil, errors.New("user not found")
 	}
@@ -32,17 +26,17 @@ func UpdateUser(uuid string, payload *model.User) (*model.User, error) {
 	return u, nil
 }
 
-func CreateUser(u *model.User) (*model.User, error) {
+func (m Moke) CreateUser(u *model.User) (*model.User, error) {
 	u.UUID = uuid.New().String()
-	list[u.UUID] = u
+	m.listUser[u.UUID] = u
 	return u, nil
 }
 
-func DeleteUser(uuid string) error {
-	_, ok := list[uuid]
+func (m Moke) DeleteUser(uuid string) error {
+	_, ok := m.listUser[uuid]
 	if !ok {
 		return errors.New("user not found")
 	}
-	delete(list, uuid)
+	delete(m.listUser, uuid)
 	return nil
 }
