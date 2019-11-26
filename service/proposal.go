@@ -10,21 +10,21 @@ import (
 	"github.com/ritoon/api-vote/model"
 )
 
-type ServiceProposal struct {
+type serviceProposal struct {
 	db db.DataManager
 }
 
 func initProposal(r *gin.Engine, data db.DataManager) {
-	var s ServiceProposal
+	var s serviceProposal
 	s.db = data
-	r.POST("/proposal", s.Create)
-	r.GET("/proposal/:uuid", s.Get)
-	r.DELETE("/proposal/:uuid", s.Delete)
-	r.PUT("/proposal/:uuid", s.Update)
+	r.POST("/proposal", s.create)
+	r.GET("/proposal/:uuid", s.get)
+	r.DELETE("/proposal/:uuid", s.delete)
+	r.PUT("/proposal/:uuid", s.update)
 }
 
-// Create is creating a proposal.
-func (sp *ServiceProposal) Create(ctx *gin.Context) {
+// create is creating a proposal.
+func (sp *serviceProposal) create(ctx *gin.Context) {
 	var p model.Proposal
 	if err := ctx.BindJSON(&p); err != nil {
 		log.Println(err)
@@ -38,8 +38,8 @@ func (sp *ServiceProposal) Create(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, p)
 }
 
-// Get is retriving a proposal from the uuid.
-func (sp *ServiceProposal) Get(ctx *gin.Context) {
+// get is retriving a proposal from the uuid.
+func (sp *serviceProposal) get(ctx *gin.Context) {
 	uuid := ctx.Param("uuid")
 	p, err := sp.db.GetProposal(uuid)
 	if err != nil {
@@ -49,8 +49,8 @@ func (sp *ServiceProposal) Get(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, p)
 }
 
-// Delete is deleting a proposal fron the uuid.
-func (sp *ServiceProposal) Delete(ctx *gin.Context) {
+// delete is deleting a proposal fron the uuid.
+func (sp *serviceProposal) delete(ctx *gin.Context) {
 	uuid := ctx.Param("uuid")
 	err := sp.db.DeleteProposal(uuid)
 	if err != nil {
@@ -61,8 +61,8 @@ func (sp *ServiceProposal) Delete(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, nil)
 }
 
-// Update is updating a proposal.
-func (sp *ServiceProposal) Update(ctx *gin.Context) {
+// update is updating a proposal.
+func (sp *serviceProposal) update(ctx *gin.Context) {
 	uuid := ctx.Param("uuid")
 
 	var payload model.Proposal

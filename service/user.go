@@ -10,21 +10,21 @@ import (
 	"github.com/ritoon/api-vote/model"
 )
 
-type ServiceUser struct {
+type serviceUser struct {
 	db db.DataManager
 }
 
 func initUser(r *gin.Engine, data db.DataManager) {
-	var s ServiceUser
+	var s serviceUser
 	s.db = data
-	r.POST("/user", s.Create)
-	r.GET("/user/:uuid", s.Get)
-	r.DELETE("/user/:uuid", s.Delete)
-	r.PUT("/user/:uuid", s.Update)
+	r.POST("/user", s.create)
+	r.GET("/user/:uuid", s.get)
+	r.DELETE("/user/:uuid", s.delete)
+	r.PUT("/user/:uuid", s.update)
 }
 
-// Create is creating a User.
-func (sp *ServiceUser) Create(ctx *gin.Context) {
+// create is creating a User.
+func (sp *serviceUser) create(ctx *gin.Context) {
 	var u model.User
 	if err := ctx.BindJSON(&u); err != nil {
 		log.Println(err)
@@ -37,8 +37,8 @@ func (sp *ServiceUser) Create(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, u)
 }
 
-// Get is retriving a User from the uuid.
-func (sp *ServiceUser) Get(ctx *gin.Context) {
+// get is retriving a User from the uuid.
+func (sp *serviceUser) get(ctx *gin.Context) {
 	uuid := ctx.Param("uuid")
 	u, err := sp.db.GetUser(uuid)
 	if err != nil {
@@ -48,8 +48,8 @@ func (sp *ServiceUser) Get(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, u)
 }
 
-// Delete is deleting a User fron the uuid.
-func (sp *ServiceUser) Delete(ctx *gin.Context) {
+// delete is deleting a User fron the uuid.
+func (sp *serviceUser) delete(ctx *gin.Context) {
 	uuid := ctx.Param("uuid")
 	err := sp.db.DeleteUser(uuid)
 	if err != nil {
@@ -59,8 +59,8 @@ func (sp *ServiceUser) Delete(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, nil)
 }
 
-// Update is updating a User.
-func (sp *ServiceUser) Update(ctx *gin.Context) {
+// update is updating a User.
+func (sp *serviceUser) update(ctx *gin.Context) {
 	uuid := ctx.Param("uuid")
 
 	var payload model.User
