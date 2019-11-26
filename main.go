@@ -27,6 +27,7 @@ func main() {
 	if viper.GetString("env") == "test" {
 		db = moke.New()
 	}
-	service.Init(r, db)
+	v1 := r.Group("/v1")
+	service.Init(v1, db)
 	r.Run(":" + viper.GetString("port"))
 }

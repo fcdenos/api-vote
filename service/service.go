@@ -6,7 +6,7 @@ import (
 )
 
 // Init initialize all sub services.
-func Init(r *gin.Engine, db db.DataManager) {
+func Init(r *gin.RouterGroup, db db.DataManager) {
 	initProposal(r, db)
 	initUser(r, db)
 }

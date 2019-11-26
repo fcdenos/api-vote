@@ -14,7 +14,7 @@ type serviceUser struct {
 	db db.DataManager
 }
 
-func initUser(r *gin.Engine, data db.DataManager) {
+func initUser(r *gin.RouterGroup, data db.DataManager) {
 	var s serviceUser
 	s.db = data
 	r.POST("/user", s.create)

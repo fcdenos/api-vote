@@ -14,7 +14,7 @@ type serviceProposal struct {
 	db db.DataManager
 }
 
-func initProposal(r *gin.Engine, data db.DataManager) {
+func initProposal(r *gin.RouterGroup, data db.DataManager) {
 	var s serviceProposal
 	s.db = data
 	r.POST("/proposal", s.create)
