@@ -7,13 +7,13 @@ import (
 )
 
 type Moke struct {
-	listUser     sync.Map
-	listProposal sync.Map
+	listUser     *sync.Map
+	listProposal *sync.Map
 }
 
 func New() db.DataManager {
 	var m Moke
-	//m.listUser = make(sync.Map)
-	//m.listProposal = make(sync.Map)
+	m.listProposal = new(sync.Map)
+	m.listUser = new(sync.Map)
 	return &m
 }

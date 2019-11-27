@@ -11,6 +11,7 @@ import (
 func (m Moke) GetProposal(uuid string) (*model.Proposal, error) {
 	ui, ok := m.listProposal.Load(uuid)
 	log.Printf("ui is %T %v", ui, ui)
+	log.Printf("ui is %T %v", ui, ui)
 
 	if !ok {
 		return nil, errors.New("Proposal not found")
