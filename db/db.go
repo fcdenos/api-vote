@@ -5,6 +5,7 @@ import "github.com/ritoon/api-vote/model"
 type DataManager interface {
 	// CRUD for Proposal
 	GetProposal(uuid string) (*model.Proposal, error)
+	GetUserByEmail(email string) (*model.User, error)
 	UpdateProposal(uuid string, payload *model.Proposal) (*model.Proposal, error)
 	CreateProposal(u *model.Proposal) (*model.Proposal, error)
 	DeleteProposal(uuid string) error

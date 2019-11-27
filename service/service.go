@@ -9,4 +9,5 @@ import (
 func Init(r *gin.RouterGroup, db db.DataManager) {
 	initProposal(r, db)
 	initUser(r, db)
+	initLogin(r, db)
 }
