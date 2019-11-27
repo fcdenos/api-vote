@@ -1,2 +1,2 @@
-env: preprod
+env: test
 port: 8081
