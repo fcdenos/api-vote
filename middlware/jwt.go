@@ -51,6 +51,7 @@ func NewJWT() *jwt.GinJWTMiddleware {
 			if int64(claims["exp"].(float64)) < time.Now().Unix() {
 				return false
 			}
+			c.Set("jwt_user_uuid", claims["uuid"].(string))
 			return true
 		},
 		Unauthorized: func(c *gin.Context, code int, message string) {

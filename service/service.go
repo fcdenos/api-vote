@@ -10,4 +10,5 @@ func Init(r *gin.RouterGroup, db db.DataManager) {
 	initLogin(r, db)
 	initProposal(r, db)
 	initUser(r, db)
+	initVote(r, db)
 }

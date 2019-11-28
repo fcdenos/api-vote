@@ -14,4 +14,6 @@ type DataManager interface {
 	UpdateUser(uuid string, payload *model.User) (*model.User, error)
 	CreateUser(u *model.User) (*model.User, error)
 	DeleteUser(uuid string) error
+	// Add Vote
+	Vote(uuid_user, uuid_proposal string) error
 }

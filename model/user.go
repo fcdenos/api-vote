@@ -13,6 +13,7 @@ type User struct {
 	LastName  string `json:"last_name,omitempty"`
 	Email     string `json:"email,omitempty"`
 	Pass      string `json:"pass"`
+	VoteDone  bool   `json:"vote_done,omitempty"`
 }
 
 func (u *User) BeforeSave() (err error) {

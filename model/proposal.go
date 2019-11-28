@@ -21,6 +21,7 @@ func (m *ModelDB) BeforeSave() (err error) {
 // Proposal represents a proposal.
 type Proposal struct {
 	ModelDB
-	Title string `json:"title"`
-	Desc  string `json:"desc"`
+	Title  string `json:"title"`
+	Desc   string `json:"desc"`
+	NBVote int    `json:"nb_vote" gorm:"column:nb_vote"`
 }
