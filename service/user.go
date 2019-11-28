@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/ritoon/api-vote/db"
+	"github.com/ritoon/api-vote/middlware"
 
 	"github.com/gin-gonic/gin"
 	"github.com/ritoon/api-vote/model"
@@ -19,8 +20,9 @@ func initUser(r *gin.RouterGroup, data db.DataManager) {
 	s.db = data
 	r.POST("/user", s.create)
 	r.GET("/user/:uuid", s.get)
-	r.DELETE("/user/:uuid", s.delete)
+	jwt := middlware.NewJWT()
 	r.PUT("/user/:uuid", s.update)
+	r.Use(jwt.MiddlewareFunc()).DELETE("/user/:uuid", s.delete)
 }
 
 // create is creating a User.

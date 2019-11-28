@@ -56,6 +56,8 @@ func (m Moke) GetUserByEmail(email string) (*model.User, error) {
 	}
 
 	m.listUser.Range(f)
-
+	if res == nil {
+		return nil, errors.New("user not found")
+	}
 	return res, nil
 }

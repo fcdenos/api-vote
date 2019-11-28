@@ -1,8 +1,6 @@
 package sqlite
 
 import (
-	"log"
-
 	"github.com/ritoon/api-vote/model"
 )
 
@@ -20,9 +18,6 @@ func (s Sqlite) UpdateUser(uuid string, payload *model.User) (*model.User, error
 }
 
 func (s Sqlite) CreateUser(u *model.User) (*model.User, error) {
-	log.Println("CreateUser 1", u)
-	u.Pass = u.HashPass(u.Pass)
-	log.Println("CreateUser 2", u)
 	return u, s.db.Create(u).Error
 }
 
