@@ -1,0 +1,6 @@
+FROM alpine:latest
+RUN apk --no-cache add ca-certificates
+WORKDIR /go/src/github.com/ritoon/api-vote/
+COPY ./app .
+COPY ./config.test.yaml .
+CMD ["./app"]

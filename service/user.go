@@ -76,5 +76,7 @@ func (sp *serviceUser) update(ctx *gin.Context) {
 
 	sp.db.UpdateUser(uuid, &payload)
 
-	ctx.JSON(http.StatusOK, &payload)
+	response, _ := sp.db.GetUser(uuid)
+
+	ctx.JSON(http.StatusOK, response)
 }

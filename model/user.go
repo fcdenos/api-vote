@@ -9,9 +9,9 @@ import (
 // User represent a user.
 type User struct {
 	ModelDB
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-	Email     string `json:"email"`
+	FirstName string `json:"first_name,omitempty"`
+	LastName  string `json:"last_name,omitempty"`
+	Email     string `json:"email,omitempty"`
 	Pass      string `json:"pass"`
 }
 
