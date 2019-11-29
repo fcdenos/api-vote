@@ -15,6 +15,7 @@ import (
 	"github.com/ritoon/api-vote/db"
 	"github.com/ritoon/api-vote/db/moke"
 	"github.com/ritoon/api-vote/db/postgres"
+	"github.com/ritoon/api-vote/db/sqlboiler"
 	"github.com/ritoon/api-vote/db/sqlite"
 	"github.com/ritoon/api-vote/service"
 )
@@ -41,6 +42,9 @@ func main() {
 		db = sqlite.New("test.db")
 	case "prod":
 		db = postgres.New("localhost", "postgres")
+		//db = postgres.New(GetLocalIP(), "postgres")
+	case "boiler":
+		db = sqlboiler.New("localhost", "postgres")
 		//db = postgres.New(GetLocalIP(), "postgres")
 	}
 	v1 := r.Group("/v1")
